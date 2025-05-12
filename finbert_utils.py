@@ -1,6 +1,6 @@
-from transformers import AutoTokenizer, AutoModelForSequenceClassification  # HuggingFace Transformers components
-import torch  # PyTorch for tensor operations and model execution
-from typing import Tuple  # Type hinting for function signatures
+from transformers import AutoTokenizer, AutoModelForSequenceClassification  
+import torch  
+from typing import Tuple  
 
 # Determine computation device: GPU if available, else CPU
 device = "cuda:0" if torch.cuda.is_available() else "cpu"
@@ -14,16 +14,7 @@ labels = ["positive", "negative", "neutral"]
 
 
 def estimate_sentiment(news: list) -> Tuple[torch.Tensor, str]:
-    """
-    Estimate overall sentiment of a list of news headlines using FinBERT.
 
-    Parameters:
-    - news (list of str): List of textual headlines or sentences.
-
-    Returns:
-    - probability (torch.Tensor): Confidence score of the predicted sentiment.
-    - sentiment (str)         : One of 'positive', 'negative', or 'neutral'.
-    """
     # If no news provided, default to neutral with 0 probability
     if not news:
         return torch.tensor(0.0), labels[-1]
