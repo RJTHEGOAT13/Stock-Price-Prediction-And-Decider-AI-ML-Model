@@ -20,19 +20,10 @@ ALPACA_CREDS = {
 
 
 class MLTrader(Strategy):
-    """
-    A Lumibot strategy that uses FinBERT sentiment analysis
-    to drive buy and sell decisions for a given symbol.
-    """
+
 
     def initialize(self, symbol: str = "SPY", cash_at_risk: float = .5):
-        """
-        Strategy initialization.
 
-        Parameters:
-        symbol (str):   Trading symbol, default is SPY.
-        cash_at_risk (float): Proportion of total cash to risk per trade.
-        """
         # Set the trading symbol and risk parameters
         self.symbol = symbol
         self.cash_at_risk = cash_at_risk
@@ -49,14 +40,7 @@ class MLTrader(Strategy):
         )
 
     def position_sizing(self):
-        """
-        Determine buy/sell quantity based on available cash and price.
 
-        Returns:
-        cash (float)      : Current account cash balance.
-        last_price (float): Latest market price of the symbol.
-        quantity (int)    : Number of shares to trade.
-        """
         cash = self.get_cash()  # Fetch current cash balance
         last_price = self.get_last_price(self.symbol)  # Current symbol price
         # Compute how many shares we can buy/sell with designated risk
@@ -64,13 +48,7 @@ class MLTrader(Strategy):
         return cash, last_price, quantity
 
     def get_dates(self):
-        """
-        Generate string dates for the sentiment lookback period.
 
-        Returns:
-        today (str)            : Today's date in YYYY-MM-DD format.
-        three_days_prior (str) : Date three days before today.
-        """
         today = self.get_datetime()  # Current simulation/live time
         three_days_prior = today - Timedelta(days=3)
         return (
@@ -79,14 +57,7 @@ class MLTrader(Strategy):
         )
 
     def get_sentiment(self):
-        """
-        Pull news headlines from Alpaca and estimate sentiment
-        using FinBERT.
 
-        Returns:
-        probability (float): Model confidence score.
-        sentiment (str)    : "positive" or "negative".
-        """
         # Fetch date range strings
         today, three_days_prior = self.get_dates()
         # Retrieve news articles for the symbol
@@ -102,10 +73,7 @@ class MLTrader(Strategy):
         return probability, sentiment
 
     def on_trading_iteration(self):
-        """
-        Core logic executed on each trading cycle.
-        Checks sentiment and places bracket orders accordingly.
-        """
+
         # Determine available funds and trade size
         cash, last_price, quantity = self.position_sizing()
         # Get the latest sentiment signal
